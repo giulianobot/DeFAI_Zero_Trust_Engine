@@ -1,4 +1,4 @@
-# DeFAI Zero Trust Engine — V0 MVP Beta
+# DeFAI Zero Trust Engine - V0 MVP Beta
 
 ## Identity
 You are the implementation agent for Giuliano Szarkezi,
@@ -17,7 +17,7 @@ Multi-Agent Consensus.
 Reject before Transaction.
 
 ## Invented Techniques
-Runtime KB Fine Tuning Technique — invented by Giuliano
+Runtime KB Fine Tuning Technique - invented by Giuliano
 Innovations 2023.
 Each Grok agent loads a knowledge-base .md file using
 readFileSync and injects the full content as the agent
@@ -26,12 +26,12 @@ This controls agent behaviour without changing model weights.
 Temperature 0 maximises deterministic output.
 
 ## Rules
-- TypeScript strict mode throughout — no JavaScript files
-- pnpm for all package operations — never npm or yarn
+- TypeScript strict mode throughout - no JavaScript files
+- pnpm for all package operations - never npm or yarn
 - Production-ready code even for MVP beta
 - Positive instructions in code and comments
-- Never commit .env files — use .env.example for templates
-- Never guess — ask if unsure
+- Never commit .env files - use .env.example for templates
+- Never guess - ask if unsure
 - Each workflow receives ONLY its explicit inputData
 - Any rejection stops the pipeline immediately
 - Agents produce structured JSON output only
@@ -43,7 +43,7 @@ Temperature 0 maximises deterministic output.
 - Mastra Cloud for workflow hosting and observability
 - SpacetimeDB 2.0 Cloud for session state and audit data
 - Zod for schema validation
-- Raw fetch() for all HTTP calls — no SDK packages for Alchemy or Lit
+- Raw fetch() for all HTTP calls - no SDK packages for Alchemy or Lit
 
 ## Model
 - Model: grok-4.20-multi-agent-0309
@@ -59,7 +59,7 @@ Temperature 0 maximises deterministic output.
 
 ## Pipeline
 Single entry point: POST /api/process in webhook.ts
-Sequential execution — any rejection stops immediately:
+Sequential execution - any rejection stops immediately:
 1. webhook.ts → generate session_id, validate request
 2. Workflow A → Grok extraction Path A
 3. Workflow B → Grok extraction Path B (independent, zero access to A)
@@ -88,7 +88,7 @@ POST https://bitcoin-testnet.g.alchemy.com/v2/${ALCHEMY_API_KEY}
 ### Lit Protocol Chipotle v3
 Base URL: https://api.dev.litprotocol.com
 BTC PSBT signing via PKP wallet
-REST API — raw fetch only
+REST API - raw fetch only
 
 ### xAI Grok
 POST https://api.x.ai/v1/chat/completions
@@ -184,5 +184,5 @@ defai-zero-trust-engine/
 19. docs/architecture.md + docs/ic3-paper-alignment.md
 
 ## Version
-V0 MVP Beta — 23 March 2026
-Bitcoin testnet only — testing purposes only
+V0 MVP Beta - 23 March 2026
+Bitcoin testnet only - testing purposes only

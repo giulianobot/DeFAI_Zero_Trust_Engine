@@ -1,8 +1,8 @@
-# DeFAI Zero Trust Engine — Architecture
+# DeFAI Zero Trust Engine - Architecture
 
 ## Zero Trust Principle for AI-to-Web3
 
-Traditional Web3 wallets trust the user's intent. AI agents introduce a new threat vector: **hallucinated transactions** — where the AI misinterprets the user's request and executes a transaction with incorrect parameters.
+Traditional Web3 wallets trust the user's intent. AI agents introduce a new threat vector: **hallucinated transactions** - where the AI misinterprets the user's request and executes a transaction with incorrect parameters.
 
 The DeFAI Zero Trust Engine applies the Zero Trust security model to AI-to-blockchain interactions:
 
@@ -11,7 +11,7 @@ The DeFAI Zero Trust Engine applies the Zero Trust security model to AI-to-block
 ## Defence Layers
 
 ### Level 1: Prompt Injection Defence
-Each Grok agent receives its instructions via **Runtime KB Fine Tuning** — a technique where a `.md` knowledge base is loaded via `readFileSync` and injected as the agent's system prompt at runtime. This:
+Each Grok agent receives its instructions via **Runtime KB Fine Tuning** - a technique where a `.md` knowledge base is loaded via `readFileSync` and injected as the agent's system prompt at runtime. This:
 
 - Prevents prompt injection by isolating agent instructions from user input
 - Controls agent behaviour without changing model weights
@@ -106,7 +106,7 @@ Mastra provides typed workflow orchestration with built-in observability via Mas
 Real-time subscriptions, persistent WebSocket connections, and auto-generated TypeScript bindings. The server module is defined in TypeScript, eliminating language boundaries. All state changes are auditable by design.
 
 ### Why Raw fetch()?
-Direct HTTP calls to Alchemy and Lit Protocol (instead of SDK packages) provide full control over request construction, error handling, and retry logic. Fewer dependencies mean fewer supply chain risks — critical for a security-focused engine.
+Direct HTTP calls to Alchemy and Lit Protocol (instead of SDK packages) provide full control over request construction, error handling, and retry logic. Fewer dependencies mean fewer supply chain risks - critical for a security-focused engine.
 
 ### Why Two Knowledge Bases?
 Using different wording prevents correlated errors between agents. If both KBs used identical phrasing, a systematic bias in the model could cause both agents to make the same mistake. Lexical diversity is a defence mechanism.

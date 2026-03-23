@@ -2,15 +2,15 @@
 
 **The world's first Zero Trust Engine for AI-to-Web3 autonomous transactions.**
 
-Built by [Giuliano Innovations](https://github.com/giulianobot) | V0 MVP Beta | 23 March 2026
+Built by [Giuliano Innovations](https://www.linkedin.com/in/giuliano-szarkezi-a7046a290/) | V0 MVP Beta | 23 March 2026
 
-> **Status:** V0 MVP Beta — for testing purposes only. Production V0.1 launch target: 27 March 2026.
+> **Status:** V0 MVP Beta - for testing purposes only. Production V0.1 launch target: 27 March 2026.
 >
 > **Try it:** [https://defaizerotrustengine.space](https://defaizerotrustengine.space)
 
 ## The Problem
 
-AI agents are executing blockchain transactions autonomously, but without safety mechanisms. The **Lobster Wilde incident** demonstrated the catastrophic risk: an AI agent sent **$250,000 USD** instead of the intended **$400 USD** — a hallucination that reached the blockchain unchecked.
+AI agents are executing blockchain transactions autonomously, but without safety mechanisms. The **Lobster Wilde incident** demonstrated the catastrophic risk: an AI agent sent **$250,000 USD** instead of the intended **$400 USD** - a hallucination that reached the blockchain unchecked.
 
 ## The Solution
 
@@ -108,8 +108,8 @@ This engine aligns with the IC3 (Initiative for CryptoCurrencies and Contracts) 
 
 ```bash
 # Clone the repository
-git clone https://github.com/giulianobot/defai-zero-trust-engine.git
-cd defai-zero-trust-engine
+git clone https://github.com/giulianobot/DeFAI_Zero_Trust_Engine.git
+cd DeFAI_Zero_Trust_Engine
 
 # Install dependencies
 pnpm install
@@ -152,7 +152,7 @@ curl -X POST http://localhost:4111/api/process \
 {
   "status": "rejected",
   "session_id": "uuid",
-  "rejection_reason": "Consensus failed — mismatched fields: amount",
+  "rejection_reason": "Consensus failed - mismatched fields: amount",
   "rejection_workflow": "D"
 }
 ```
@@ -167,15 +167,28 @@ This is a **V0 MVP Beta** for testing purposes only. Operates on **Bitcoin testn
 
 You may use this software **personally** for your own cryptocurrency trading and Web3 transactions, subject to these terms:
 
-- **Sole user only** — no shared access, multi-user deployments, or hosted services
-- **No reselling** — you may not resell, sublicense, or redistribute for profit
-- **No whitelabel** — modified-for-resale or rebranded versions require a separate commercial whitelabel license
-- **No competing services** — you may not use this to build a competing transaction safety product
+- **Sole user only** - no shared access, multi-user deployments, or hosted services
+- **No reselling** - you may not resell, sublicense, or redistribute for profit
+- **No whitelabel** - modified-for-resale or rebranded versions require a separate commercial whitelabel license
+- **No competing services** - you may not use this to build a competing transaction safety product
 
 By using this repository, you agree you are the sole user and accept these terms.
 
-**Change Date:** 23 March 2030 — automatically converts to **AGPL 3.0**
+**Change Date:** 23 March 2030 - automatically converts to **AGPL 3.0**
 
-For commercial licensing or whitelabel agreements, contact: giulianoaibot@gmail.com
+### Whitelabel and Enterprise Licensing
+
+For organisations looking to deploy DeFAI Zero Trust Engine at scale, we offer commercial licensing options:
+
+| Option | Description |
+|--------|-------------|
+| **Enterprise Self-Hosting** | Deploy on your own infrastructure with a commercial license. Full control over your data and environment. |
+| **Hosted For You** | We host, manage, and maintain the engine on your behalf. Turnkey deployment with SLA support. |
+| **Wrapper / Reseller** | Build your own product on top of the engine with a whitelabel reseller license. Your brand, our technology. |
+
+For commercial licensing, whitelabel agreements, or enterprise enquiries:
+
+- **Email:** ceoinnovator@giulianoinnovations.agency
+- **Website:** [https://defaizerotrustengine.space](https://defaizerotrustengine.space)
 
 See [LICENSE](LICENSE) for full legal terms.

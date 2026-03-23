@@ -29,11 +29,11 @@ The DeFAI Zero Trust Engine aligns with research principles from the **IC3 (Init
 **IC3 Principle**: Reduce the number of trusted components in the system.
 
 **DeFAI Implementation**:
-- The consensus gate (Workflow D) trusts **zero** LLMs — pure TypeScript comparison
+- The consensus gate (Workflow D) trusts **zero** LLMs - pure TypeScript comparison
 - Each agent operates independently with its own knowledge base
 - No single agent can approve a transaction
 - Temperature 0 minimises non-deterministic behaviour
-- X search disabled — agents rely solely on user message content
+- X search disabled - agents rely solely on user message content
 
 ### 4. Auditability and Transparency
 **IC3 Principle**: All actions should be auditable after the fact.
@@ -45,11 +45,11 @@ The DeFAI Zero Trust Engine aligns with research principles from the **IC3 (Init
 - Complete transaction lifecycle visible through SpacetimeDB queries
 
 ### 5. Fail-Safe Design
-**IC3 Principle**: Systems should fail safely — deny by default.
+**IC3 Principle**: Systems should fail safely - deny by default.
 
 **DeFAI Implementation**:
 - Any workflow rejection stops the entire pipeline immediately
-- The default state is "pending" — a transaction must be explicitly approved
+- The default state is "pending" - a transaction must be explicitly approved
 - Extraction failure from either agent triggers rejection
 - Insufficient balance triggers rejection
 - Signing failure triggers rejection
@@ -61,7 +61,7 @@ On [date], an AI agent autonomously executed a blockchain transaction sending $2
 
 1. AI agents can hallucinate transaction parameters
 2. Single-agent architectures have no safety net
-3. Blockchain transactions are irreversible — prevention is the only defence
+3. Blockchain transactions are irreversible - prevention is the only defence
 
 The DeFAI Zero Trust Engine directly addresses this failure mode through multi-agent consensus. Had the Lobster Wilde agent used this engine, the $250,000 transaction would have been **rejected at Workflow D** because a second independent agent would have extracted the correct $400 amount, triggering a consensus mismatch.
 
@@ -74,6 +74,6 @@ The DeFAI Zero Trust Engine directly addresses this failure mode through multi-a
 
 ## References
 
-- IC3 (Initiative for CryptoCurrencies and Contracts) — Cornell University
+- IC3 (Initiative for CryptoCurrencies and Contracts) - Cornell University
 - Liquefaction: DeFi Security and Composability Research
-- DeFAI Zero Trust Engine — Giuliano Innovations, 2026
+- DeFAI Zero Trust Engine - Giuliano Innovations, 2026
