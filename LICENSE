@@ -8,10 +8,33 @@ Parameters
 Licensor:             Giuliano Innovations
 Licensed Work:        DeFAI Zero Trust Engine
                       The Licensed Work is (c) 2026 Giuliano Innovations
-Additional Use Grant: You may make use of the Licensed Work, provided that
-                      you do not use the Licensed Work for a Transaction
-                      Safety Service offering that competes with the
-                      Licensed Work.
+Additional Use Grant: You may make personal, non-commercial use of the
+                      Licensed Work for your own cryptocurrency trading
+                      and transacting in Web3, provided that:
+
+                      (a) You are the sole user of your copy of the
+                          Licensed Work — no shared access, multi-user
+                          deployments, or hosted services are permitted.
+
+                      (b) You do not resell, sublicense, redistribute for
+                          profit, or offer the Licensed Work (or any
+                          derivative) as a commercial service, SaaS, API,
+                          or managed offering.
+
+                      (c) You do not create whitelabel, rebranded, or
+                          modified-for-resale versions of the Licensed
+                          Work without a separate commercial whitelabel
+                          license from the Licensor.
+
+                      (d) You do not use the Licensed Work to build a
+                          competing Transaction Safety Service or AI-to-
+                          blockchain verification product.
+
+                      For commercial licensing, whitelabel agreements, or
+                      enterprise deployments, contact the Licensor at
+                      giulianoaibot@gmail.com.
+
+Production Version:   V0.1 production launch target: 27 March 2026
 Change Date:          2030-03-23
 Change License:       GNU Affero General Public License v3.0
 

@@ -4,6 +4,10 @@
 
 Built by [Giuliano Innovations](https://github.com/giulianobot) | V0 MVP Beta | 23 March 2026
 
+> **Status:** V0 MVP Beta — for testing purposes only. Production V0.1 launch target: 27 March 2026.
+>
+> **Try it:** [https://defaizerotrustengine.space](https://defaizerotrustengine.space)
+
 ## The Problem
 
 AI agents are executing blockchain transactions autonomously, but without safety mechanisms. The **Lobster Wilde incident** demonstrated the catastrophic risk: an AI agent sent **$250,000 USD** instead of the intended **$400 USD** — a hallucination that reached the blockchain unchecked.
@@ -159,6 +163,19 @@ This is a **V0 MVP Beta** for testing purposes only. Operates on **Bitcoin testn
 
 ## License
 
-Business Source License 1.1 — converts to AGPL 3.0 on 23 March 2030.
+**Business Source License 1.1** (BSL 1.1)
 
-See [LICENSE](LICENSE) for full terms.
+You may use this software **personally** for your own cryptocurrency trading and Web3 transactions, subject to these terms:
+
+- **Sole user only** — no shared access, multi-user deployments, or hosted services
+- **No reselling** — you may not resell, sublicense, or redistribute for profit
+- **No whitelabel** — modified-for-resale or rebranded versions require a separate commercial whitelabel license
+- **No competing services** — you may not use this to build a competing transaction safety product
+
+By using this repository, you agree you are the sole user and accept these terms.
+
+**Change Date:** 23 March 2030 — automatically converts to **AGPL 3.0**
+
+For commercial licensing or whitelabel agreements, contact: giulianoaibot@gmail.com
+
+See [LICENSE](LICENSE) for full legal terms.
