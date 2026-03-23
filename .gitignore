@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+.mastra/
+
+# Auto-generated SpacetimeDB bindings
+src/module_bindings/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test results
+test-results/
+playwright-report/
+
+# Debug
+*.log
+npm-debug.log*
+pnpm-debug.log*

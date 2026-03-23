@@ -1,0 +1,40 @@
+{
+  "name": "defai-zero-trust-engine",
+  "version": "0.1.0-beta",
+  "description": "Zero Trust Engine for AI to Web3 autonomous transactions — Giuliano Innovations",
+  "type": "module",
+  "scripts": {
+    "dev": "mastra dev",
+    "build": "mastra build",
+    "test": "playwright test",
+    "spacetime:generate": "spacetime generate --lang typescript --out-dir src/module_bindings"
+  },
+  "keywords": [
+    "web3",
+    "ai",
+    "zero-trust",
+    "bitcoin",
+    "defi",
+    "anti-hallucination",
+    "mastra",
+    "spacetimedb"
+  ],
+  "author": "Giuliano Szarkezi <giulianoaibot@gmail.com>",
+  "license": "BUSL-1.1",
+  "packageManager": "pnpm@10.32.1",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@mastra/core": "latest",
+    "mastra": "latest",
+    "zod": "^3.24.0",
+    "spacetimedb": "latest",
+    "dotenv": "^16.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "typescript": "^5.7.0",
+    "@types/node": "^22.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "defai-spacetimedb-module",
+  "version": "0.1.0",
+  "type": "module",
+  "dependencies": {
+    "spacetimedb": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}
