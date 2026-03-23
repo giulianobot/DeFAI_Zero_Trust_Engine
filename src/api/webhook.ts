@@ -1,14 +1,18 @@
 /**
- * DeFAI Zero Trust Engine — Webhook API
+ * DeFAI Zero Trust Engine - Webhook API
  *
  * Single entry point: POST /api/process
  * Sequential pipeline orchestrator with fail-fast rejection.
  *
+ * Supports two modes:
+ * - "safe" (default): Full Zero Trust pipeline with KB Fine Tuning + temp 0
+ * - "unsafe" (demo): No KB, no system prompt, temp 1 - shows hallucination risk
+ *
  * Pipeline sequence:
  * 1. Generate session_id, create session in SpacetimeDB
- * 2. Run Workflow A (Grok extraction Path A)
- * 3. Run Workflow B (Grok extraction Path B — independent)
- * 4. Run Workflow D (TypeScript === consensus check)
+ * 2. Run Workflow A or A-unsafe (Grok extraction Path A)
+ * 3. Run Workflow B or B-unsafe (Grok extraction Path B - independent)
+ * 4. Run Workflow D (TypeScript === consensus check - same for both modes)
  * 5. Run Workflow Price (Alchemy BTC price + balance + contact)
  * 6. Run Workflow Sign (Lit Protocol signing + Alchemy broadcast)
  * 7. Return result to caller
@@ -22,19 +26,23 @@ import { preprocessRawInput } from '../lib/normalise.js';
 import { getDbConnection } from '../lib/spacetimedb-client.js';
 import { workflowA } from '../workflows/workflow-a.js';
 import { workflowB } from '../workflows/workflow-b.js';
+import { workflowAUnsafe } from '../workflows/workflow-a-unsafe.js';
+import { workflowBUnsafe } from '../workflows/workflow-b-unsafe.js';
 import { workflowD } from '../workflows/workflow-d.js';
 import { workflowPrice } from '../workflows/workflow-price.js';
 import { workflowSign } from '../workflows/workflow-sign.js';
 
-// ─── Request Schema ──────────────────────────────────────────────
+// -- Request Schema --
 const ProcessRequestSchema = z.object({
   raw_input: z.string().min(1, 'raw_input is required'),
+  mode: z.enum(['safe', 'unsafe']).default('safe'),
 });
 
-// ─── Response Types ──────────────────────────────────────────────
+// -- Response Types --
 interface SuccessResponse {
   status: 'approved';
   session_id: string;
+  mode: 'safe' | 'unsafe';
   tx_hash: string;
   btc_amount: number;
   usd_amount: number;
@@ -46,6 +54,7 @@ interface SuccessResponse {
 interface RejectionResponse {
   status: 'rejected';
   session_id: string;
+  mode: 'safe' | 'unsafe';
   rejection_reason: string;
   rejection_workflow: string;
 }
@@ -57,27 +66,32 @@ interface ErrorResponse {
 
 type ProcessResponse = SuccessResponse | RejectionResponse | ErrorResponse;
 
-// ─── Pipeline Orchestrator ───────────────────────────────────────
+// -- Pipeline Orchestrator --
 
 /**
- * Processes a transaction request through the full Zero Trust pipeline.
- * Called by the Mastra API route handler.
+ * Processes a transaction request through the Zero Trust pipeline.
+ * Mode determines whether safe (KB + temp 0) or unsafe (no KB + temp 1) agents are used.
  */
-export async function processTransaction(rawInput: string): Promise<ProcessResponse> {
-  // Generate unique session ID
+export async function processTransaction(
+  rawInput: string,
+  mode: 'safe' | 'unsafe' = 'safe'
+): Promise<ProcessResponse> {
   const session_id = randomUUID();
-
-  // Preprocess raw input
   const processed_input = preprocessRawInput(rawInput);
+
+  // Select workflow variants based on mode
+  const selectedWorkflowA = mode === 'safe' ? workflowA : workflowAUnsafe;
+  const selectedWorkflowB = mode === 'safe' ? workflowB : workflowBUnsafe;
+  const modeLabel = mode === 'safe' ? 'SAFE' : 'UNSAFE';
 
   try {
     // Step 0: Create session in SpacetimeDB
     const conn = await getDbConnection();
     conn.reducers.insertSession(session_id, processed_input);
 
-    // Step 1: Run Workflow A — Grok extraction Path A
-    console.log(`[${session_id}] Starting Workflow A...`);
-    const runA = await workflowA.createRun();
+    // Step 1: Run Workflow A (safe or unsafe based on mode)
+    console.log(`[${session_id}] [${modeLabel}] Starting Workflow A...`);
+    const runA = await selectedWorkflowA.createRun();
     const resultA = await runA.start({
       inputData: { raw_input: processed_input, session_id },
     });
@@ -86,6 +100,7 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Workflow A execution failed',
         rejection_workflow: 'A',
       };
@@ -96,14 +111,15 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Agent A failed to extract transaction fields',
         rejection_workflow: 'A',
       };
     }
 
-    // Step 2: Run Workflow B — Grok extraction Path B (independent)
-    console.log(`[${session_id}] Starting Workflow B...`);
-    const runB = await workflowB.createRun();
+    // Step 2: Run Workflow B (safe or unsafe based on mode - independent)
+    console.log(`[${session_id}] [${modeLabel}] Starting Workflow B...`);
+    const runB = await selectedWorkflowB.createRun();
     const resultB = await runB.start({
       inputData: { raw_input: processed_input, session_id },
     });
@@ -112,6 +128,7 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Workflow B execution failed',
         rejection_workflow: 'B',
       };
@@ -122,13 +139,15 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Agent B failed to extract transaction fields',
         rejection_workflow: 'B',
       };
     }
 
-    // Step 3: Run Workflow D — Consensus check (pure TypeScript ===)
-    console.log(`[${session_id}] Starting Workflow D (consensus check)...`);
+    // Step 3: Run Workflow D - consensus check (same for both modes)
+    // The consensus gate is ALWAYS pure TypeScript === regardless of mode
+    console.log(`[${session_id}] [${modeLabel}] Starting Workflow D (consensus check)...`);
     const runD = await workflowD.createRun();
     const resultD = await runD.start({
       inputData: {
@@ -142,6 +161,7 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Workflow D execution failed',
         rejection_workflow: 'D',
       };
@@ -152,13 +172,14 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
-        rejection_reason: `Consensus failed — mismatched fields: ${outputD.mismatches.join(', ')}`,
+        mode,
+        rejection_reason: `Consensus failed - mismatched fields: ${outputD.mismatches.join(', ')}`,
         rejection_workflow: 'D',
       };
     }
 
-    // Step 4: Run Workflow Price — Alchemy BTC price + balance + contact
-    console.log(`[${session_id}] Starting Workflow Price...`);
+    // Step 4: Run Workflow Price - Alchemy BTC price + balance + contact
+    console.log(`[${session_id}] [${modeLabel}] Starting Workflow Price...`);
     const runPrice = await workflowPrice.createRun();
     const resultPrice = await runPrice.start({
       inputData: {
@@ -171,6 +192,7 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Workflow Price execution failed',
         rejection_workflow: 'price',
       };
@@ -181,13 +203,14 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: `Price check failed: ${outputPrice.status}`,
         rejection_workflow: 'price',
       };
     }
 
-    // Step 5: Run Workflow Sign — Lit Protocol signing + Alchemy broadcast
-    console.log(`[${session_id}] Starting Workflow Sign...`);
+    // Step 5: Run Workflow Sign - Lit Protocol signing + Alchemy broadcast
+    console.log(`[${session_id}] [${modeLabel}] Starting Workflow Sign...`);
     const runSign = await workflowSign.createRun();
     const resultSign = await runSign.start({
       inputData: {
@@ -203,6 +226,7 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: 'Workflow Sign execution failed',
         rejection_workflow: 'sign',
       };
@@ -213,17 +237,19 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       return {
         status: 'rejected',
         session_id,
+        mode,
         rejection_reason: `Signing/broadcast failed: ${outputSign.broadcast_status}`,
         rejection_workflow: 'sign',
       };
     }
 
-    // All workflows passed — transaction approved
-    console.log(`[${session_id}] Transaction approved — tx_hash: ${outputSign.tx_hash}`);
+    // All workflows passed - transaction approved
+    console.log(`[${session_id}] [${modeLabel}] Transaction approved - tx_hash: ${outputSign.tx_hash}`);
 
     return {
       status: 'approved',
       session_id,
+      mode,
       tx_hash: outputSign.tx_hash,
       btc_amount: outputPrice.btc_amount,
       usd_amount: outputPrice.usd_amount,
@@ -232,9 +258,8 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
       btc_price_usd: outputPrice.btc_price_usd,
     };
   } catch (error) {
-    console.error(`[${session_id}] Pipeline error:`, error);
+    console.error(`[${session_id}] [${modeLabel}] Pipeline error:`, error);
 
-    // Attempt to update session status on unexpected error
     try {
       const conn = await getDbConnection();
       conn.reducers.updateSessionStatus(
@@ -254,17 +279,16 @@ export async function processTransaction(rawInput: string): Promise<ProcessRespo
   }
 }
 
-// ─── Request Validation ──────────────────────────────────────────
+// -- Request Validation --
 
 /**
  * Validates and processes an incoming webhook request.
- * This is the handler used by the Mastra API route.
+ * Accepts optional mode parameter: "safe" (default) or "unsafe" (demo).
  */
 export async function handleProcessRequest(body: unknown): Promise<{
   statusCode: number;
   body: ProcessResponse;
 }> {
-  // Validate request body
   const parsed = ProcessRequestSchema.safeParse(body);
 
   if (!parsed.success) {
@@ -277,7 +301,7 @@ export async function handleProcessRequest(body: unknown): Promise<{
     };
   }
 
-  const result = await processTransaction(parsed.data.raw_input);
+  const result = await processTransaction(parsed.data.raw_input, parsed.data.mode);
 
   const statusCode =
     result.status === 'approved' ? 200 :
