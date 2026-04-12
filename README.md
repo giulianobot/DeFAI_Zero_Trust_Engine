@@ -1,4 +1,6 @@
-# DeFAI Zero Trust Engine
+Failed MVP V0 discontinued # DeFAI Zero Trust Engine due to
+
+renaming & Upgrading both Licence to MIT via new repo & due to the Architecture behind it being upgraded to next level for Both AI to Web2 & AI Web3 for Transacting
 
 **The world's first Zero Trust Engine for AI-to-Web3 autonomous transactions.**
 
